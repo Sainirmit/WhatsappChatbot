@@ -96,7 +96,7 @@ app.post('/webhook', async (req, res) => {
         }
     }
 
-    if (responseMessage) {
+    if (responseMessage && userState[from] !== 'waitingForOptionAfter6Hours') {  // Exclude response if waiting for 6-hour reminder interaction
         await sendMessage(from, responseMessage);
     }
 
@@ -129,7 +129,7 @@ const sendMessage = async (to, text) => {
         console.log(`Sending message to ${to}: ${text}`);
         await client.messages.create({
             from: 'whatsapp:+14155238886', // Your Twilio WhatsApp Sandbox number
-            to: 'whatsapp:+919878417442', // The user's WhatsApp number
+            to: to, // The user's WhatsApp number
             body: text
         });
         console.log(`Message sent to ${to}`);
